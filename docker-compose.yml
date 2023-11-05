@@ -5,3 +5,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
+
+  cors-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile.cors-proxy # Use the custom Dockerfile
+    ports:
+      - "8080:8080"
