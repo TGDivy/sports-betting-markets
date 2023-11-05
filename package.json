@@ -1,6 +1,7 @@
 {
   "name": "sports-betting-markets",
   "version": "0.1.0",
+  "homepage": "https://tgdivy.github.io/sports-betting-markets",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
