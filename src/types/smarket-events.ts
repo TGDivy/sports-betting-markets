@@ -1,4 +1,5 @@
 export type eventState =
+  | "new"
   | "upcoming"
   | "live"
   | "ended"
