@@ -1,3 +1,4 @@
+import { USE_NEW_TYPES } from "config/constants";
 import {
   eventState,
   eventType,
@@ -10,9 +11,9 @@ import { smarketsEventsAPI } from "./init";
 interface getEventsRequest {
   id?: string[]; // A list of event IDs to filter by
   inplay_enabled?: boolean;
-  state?: eventState;
-  type_domain?: eventTypeDomain;
-  type_scope?: eventTypeScope;
+  state?: eventState[];
+  type_domain?: eventTypeDomain[];
+  type_scope?: eventTypeScope[];
   with_new_type?: boolean;
   parent_id?: string[]; // A list of parent event IDs to filter by
   start_datetime_min?: string;
@@ -36,7 +37,7 @@ interface getEventsRequest {
 }
 
 export const getEvents = async (params: getEventsRequest) => {
-  params.with_new_type = true;
+  params.with_new_type = USE_NEW_TYPES;
   try {
     const response = await smarketsEventsAPI.get<{
       events: eventType[];
@@ -48,4 +49,12 @@ export const getEvents = async (params: getEventsRequest) => {
   } catch (error) {
     throw error;
   }
+};
+
+export const getPaginationLastId = (pagination: string) => {
+  const pagination_last_id = pagination.split("&").find((item) => {
+    return item.includes("pagination_last_id");
+  });
+
+  return pagination_last_id ? Number(pagination_last_id.split("=")[1]) : null;
 };

@@ -10,6 +10,24 @@ export const smarketsEventsAPI = axios.create({
 
 smarketsEventsAPI.interceptors.request.use(
   (config) => {
+    // Customize the serialization of query parameters
+    if (config.params) {
+      const params = Object.keys(config.params)
+        .map((key) => {
+          const value = config.params[key];
+          if (Array.isArray(value)) {
+            return value
+              .map((v) => `${key}=${encodeURIComponent(v)}`)
+              .join("&");
+          } else {
+            return `${key}=${encodeURIComponent(value)}`;
+          }
+        })
+        .join("&");
+      config.url += `?${params}`;
+      config.params = undefined;
+    }
+
     return config;
   },
   (error) => {
