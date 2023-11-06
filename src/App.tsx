@@ -1,4 +1,4 @@
-import { Breadcrumb, ConfigProvider, Layout, theme } from "antd";
+import { Breadcrumb, ConfigProvider, FloatButton, Layout, theme } from "antd";
 import "antd/dist/reset.css";
 import { MainHeader } from "components/header/header";
 import { MainSider } from "components/sider/sider";
@@ -69,7 +69,7 @@ const App = () => {
         },
       }}
     >
-      <Layout className="layout" style={{ minHeight: "100vh" }}>
+      <Layout className="layout" style={{ minHeight: "100vh", height: "100%" }}>
         <Routes>
           <Route path="" element={<Outline />}>
             <Route path="" element={<HomePage />} />
@@ -77,6 +77,7 @@ const App = () => {
             <Route path="login" element={<> Login </>} />
           </Route>
         </Routes>
+        <FloatButton.BackTop />
       </Layout>
     </ConfigProvider>
   );

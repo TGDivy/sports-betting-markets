@@ -64,7 +64,10 @@ const CategoriesMenu = () => {
       selectedKeys={[activeKey]}
       style={{ height: "100%", borderRight: 0 }}
       items={items}
-      onSelect={({ key }) => navigate(`/${key}`)}
+      onSelect={({ key }) => {
+        navigate(`/${key}`);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }}
     />
   );
 };
