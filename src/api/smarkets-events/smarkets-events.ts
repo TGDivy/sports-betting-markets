@@ -1,10 +1,12 @@
 import { USE_NEW_TYPES } from "config/constants";
 import {
+  competitorT,
   eventState,
   eventType,
   eventTypeDomain,
   eventTypeScope,
   jurisdictionType,
+  marketType,
 } from "../../types/smarket-events";
 import { smarketsEventsAPI } from "./init";
 
@@ -45,6 +47,41 @@ export const getEvents = async (params: getEventsRequest) => {
         next_page: string | null;
       };
     }>("", { params });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getEventStates = async (event_ids: number[]) => {
+  try {
+    const response = await smarketsEventsAPI.get<{
+      states: eventState[];
+    }>(`${event_ids.join(",")}/states/`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getEventCompetitors = async (event_ids: number[]) => {
+  try {
+    const response = await smarketsEventsAPI.get<{
+      description: string;
+      competitors: competitorT[];
+    }>(`${event_ids.join(",")}/competitors/`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getEventMarkets = async (event_ids: number[]) => {
+  try {
+    const response = await smarketsEventsAPI.get<{
+      description: string;
+      markets: marketType[];
+    }>(`${event_ids.join(",")}/markets/`);
     return response.data;
   } catch (error) {
     throw error;

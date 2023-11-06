@@ -96,3 +96,98 @@ export interface eventType {
     scope: eventTypeScope;
   };
 }
+
+export type competitorType =
+  | "a"
+  | "b"
+  | "home"
+  | "away"
+  | "Runner"
+  | "NonRunner";
+
+export interface competitorT {
+  event_id: number;
+  id: number;
+  info?: {
+    colorPrimary?: string;
+    colorSecondary?: string;
+    keywords?: string[];
+  };
+  name: string;
+  short_name: string;
+  short_code: string;
+  slug: string;
+  type: competitorType;
+}
+
+export type marketCategoryType =
+  | "goals"
+  | "half_time"
+  | "handicap"
+  | "totals"
+  | "corners"
+  | "cards"
+  | "players"
+  | "winner"
+  | "other"
+  | "teams"
+  | "place"
+  | "relegation"
+  | "nationality"
+  | "make_the_cut"
+  | "first_round_leader"
+  | "one_eighty"
+  | "set"
+  | "game"
+  | "half"
+  | "quarter"
+  | "frame"
+  | "hole_in_one"
+  | "hole_group_betting"
+  | "hole_match_bet"
+  | "bet_builder";
+
+export interface marketType {
+  bet_delay: number;
+  cashout_unavailable: boolean;
+  categories?: string[];
+  category?: marketCategoryType;
+  complete: boolean;
+  created: string;
+  display_order?: number;
+  description?: string;
+  display_type?: string;
+  event_id: number;
+  hidden: boolean;
+  id: number;
+  info?: {
+    description?: string;
+  };
+  inplay_enabled: boolean;
+  market_type?: {
+    description?: string;
+    name: string;
+    param: string;
+    params: {
+      [key: string]: string;
+    };
+  };
+  modified: string;
+  name: string;
+  slug: string;
+  state:
+    | "new"
+    | "open"
+    | "live"
+    | "halted"
+    | "settled"
+    | "voided"
+    | "unavailable";
+  winner_count: number;
+}
+
+export interface extendedEventType extends eventType {
+  competitors: competitorT[];
+  markets: marketType[];
+  states: any;
+}
