@@ -2,7 +2,6 @@ import { Layout, Menu, MenuProps } from "antd";
 import { getEvents } from "api/smarkets-events/smarkets-events";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { eventTypeDomain } from "types/smarket-events";
 import { useSessionStorageAPI } from "utils/hook";
 
 type Props = {};
@@ -27,19 +26,6 @@ export const MainSider = (props: Props) => {
 };
 
 type MenuItem = Required<MenuProps>["items"][number];
-
-const getPopularCategories = async (type_domain: eventTypeDomain) => {
-  const { events } = await getEvents({
-    type_domain: [type_domain],
-    type_scope: ["category"],
-    include_hidden: false,
-    state: ["new", "upcoming", "live"],
-    limit: 15,
-    sort: "display_order,start_datetime,name",
-  });
-
-  return events;
-};
 
 const CategoriesMenu = () => {
   const location = useLocation();
@@ -70,8 +56,6 @@ const CategoriesMenu = () => {
       label: name,
     };
   });
-
-  console.log(activeKey);
 
   return (
     <Menu

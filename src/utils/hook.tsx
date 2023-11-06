@@ -31,7 +31,6 @@ export const useSessionStorageAPI = <T,>(
 
     // Check if the data is expired
     const storedDataExpiry = sessionStorage.getItem(`${key}_expiry`);
-    console.log(storedDataExpiry);
     if (storedDataExpiry) {
       const expiryDate = parseInt(storedDataExpiry);
       const now = Date.now();
