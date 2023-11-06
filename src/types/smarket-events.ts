@@ -188,6 +188,16 @@ export interface marketType {
 
 export interface extendedEventType extends eventType {
   competitors: competitorT[];
-  markets: marketType[];
+  markets: extendedMarketType[];
   states: any;
+}
+
+export interface volumentType {
+  double_stake_volume: number;
+  market_id: number;
+  volume: number;
+}
+
+export interface extendedMarketType extends marketType {
+  volume?: volumentType;
 }

@@ -81,7 +81,12 @@ export const getEventMarkets = async (event_ids: number[]) => {
     const response = await smarketsEventsAPI.get<{
       description: string;
       markets: marketType[];
-    }>(`${event_ids.join(",")}/markets/`);
+    }>(`${event_ids.join(",")}/markets/`, {
+      params: {
+        popular: false,
+        limit_by_event: 7,
+      },
+    });
     return response.data;
   } catch (error) {
     throw error;

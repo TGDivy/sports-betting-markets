@@ -6,6 +6,7 @@ import {
   Flex,
   List,
   Skeleton,
+  Space,
   Tooltip,
   Typography,
 } from "antd";
@@ -15,6 +16,7 @@ import {
   getEventStates,
   getEvents,
 } from "api/smarkets-events/smarkets-events";
+import { getMarketVolumes } from "api/smarkets-markets/smarkets-events";
 import React from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -22,7 +24,9 @@ import {
   eventType,
   eventTypeDomain,
   extendedEventType,
+  extendedMarketType,
   marketType,
+  volumentType,
 } from "types/smarket-events";
 
 type Props = {};
@@ -51,7 +55,10 @@ const getDomainInfoAndEvents = async (domain: eventTypeDomain) => {
   });
 
   if (!events.events.length) {
-    throw new Error("No events found");
+    return {
+      domainInfo,
+      combinedEvents: [],
+    };
   }
 
   const eventsStates = await getEventStates(
@@ -66,10 +73,19 @@ const getDomainInfoAndEvents = async (domain: eventTypeDomain) => {
     events.events.map((event) => event.id)
   );
 
+  const marketsVolumes = await getMarketVolumes(
+    eventsMarkets.markets.map((market) => market.id)
+  );
+
+  const combinedMarketData = combineMarketData(
+    eventsMarkets.markets,
+    marketsVolumes.volumes
+  );
+
   const combinedEvents = combineEventData(
     events.events,
     eventsCompetitors.competitors,
-    eventsMarkets.markets,
+    combinedMarketData,
     eventsStates
   );
 
@@ -79,13 +95,31 @@ const getDomainInfoAndEvents = async (domain: eventTypeDomain) => {
   };
 };
 
+const combineMarketData = (
+  eventsMarkets: marketType[],
+  marketsVolumes: volumentType[]
+) => {
+  // can be optimzized later
+  const combinedEvents = eventsMarkets.map((eventMarket) => {
+    const marketVolume = marketsVolumes.find(
+      (marketVolume) => marketVolume.market_id === eventMarket.id
+    );
+
+    return {
+      ...eventMarket,
+      volume: marketVolume,
+    };
+  });
+
+  return combinedEvents;
+};
+
 // each of the events compettiors, markets, and states has event id field. We can use that to map the data to the events
 // we can use the event id to map the data to the events
-
 const combineEventData = (
   events: eventType[],
   eventsCompetitors: competitorT[],
-  eventsMarkets: marketType[],
+  eventsMarkets: extendedMarketType[],
   eventsStates: any
 ) => {
   // can be optimzized later
@@ -170,12 +204,38 @@ export const EventsPage = (props: Props) => {
         }}
         dataSource={combinedEvents}
         renderItem={(item) => {
-          const { name, description, special_rules } = item;
+          const {
+            name,
+            description,
+            special_rules,
+            markets,
+            start_date,
+            competitors,
+          } = item;
           return (
             <List.Item>
               <Card
-                title={name}
-                hoverable
+                title={
+                  <Flex vertical>
+                    <Typography.Text strong>{name}</Typography.Text>
+                    {start_date && (
+                      <Typography.Text
+                        type="secondary"
+                        style={{
+                          fontSize: 12,
+                        }}
+                      >
+                        {new Date(start_date).toLocaleString("en-GB", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </Typography.Text>
+                    )}
+                  </Flex>
+                }
+                // hoverable
                 extra={
                   special_rules && (
                     <Tooltip title={special_rules}>
@@ -190,6 +250,25 @@ export const EventsPage = (props: Props) => {
                 }
               >
                 <Typography.Paragraph>{description}</Typography.Paragraph>
+                <List
+                  dataSource={markets}
+                  itemLayout="vertical"
+                  renderItem={(item) => {
+                    const { name, description, category, created, id, volume } =
+                      item;
+                    const volumeData = volume?.volume;
+                    return (
+                      <List.Item>
+                        {name}{" "}
+                        {volumeData &&
+                          new Intl.NumberFormat("en-GB", {
+                            style: "currency",
+                            currency: "GBP",
+                          }).format(volumeData)}
+                      </List.Item>
+                    );
+                  }}
+                />
               </Card>
             </List.Item>
           );
