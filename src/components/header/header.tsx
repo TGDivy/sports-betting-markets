@@ -1,3 +1,4 @@
+import { UserOutlined } from "@ant-design/icons";
 import { Button, Flex, Layout, Typography } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -47,6 +48,12 @@ export const MainHeader = (props: Props) => {
             <Typography.Title level={4}>Prototype</Typography.Title>
           </Button>
         </Link>
+
+        <Flex align="center">
+          <Button type="text" icon={<UserOutlined />} size="large">
+            Guest user
+          </Button>
+        </Flex>
       </Flex>
     </Header>
   );

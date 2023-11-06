@@ -1,6 +1,7 @@
 import { Layout, Menu, MenuProps } from "antd";
 import { getEvents } from "api/smarkets-events/smarkets-events";
-import React, { useState } from "react";
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { eventTypeDomain } from "types/smarket-events";
 import { useSessionStorageAPI } from "utils/hook";
 
@@ -16,6 +17,9 @@ export const MainSider = (props: Props) => {
       collapsed={collapsed}
       onCollapse={(value) => setCollapsed(value)}
       trigger={null}
+      style={{
+        backgroundColor: "transparent",
+      }}
     >
       <CategoriesMenu />
     </Sider>
@@ -38,8 +42,8 @@ const getPopularCategories = async (type_domain: eventTypeDomain) => {
 };
 
 const CategoriesMenu = () => {
-  // const [openKeys, setOpenKeys] = useState(["sub1"]);
-  const [activeKey, setActiveKey] = useState<eventTypeDomain>();
+  const location = useLocation();
+  const navigate = useNavigate();
   const data = useSessionStorageAPI({
     key: "rootCategories",
     fetchFn: async () => {
@@ -53,8 +57,8 @@ const CategoriesMenu = () => {
     },
     expiry: 60 * 60 * 24,
   });
+  const activeKey = location.pathname.split("/")[1];
 
-  // const data = null;
   if (!data) {
     return null;
   }
@@ -67,14 +71,16 @@ const CategoriesMenu = () => {
     };
   });
 
+  console.log(activeKey);
+
   return (
     <Menu
       mode="inline"
       activeKey={activeKey}
-      openKeys={[activeKey || ""]}
+      selectedKeys={[activeKey]}
       style={{ height: "100%", borderRight: 0 }}
       items={items}
-      onSelect={({ key }) => setActiveKey(key as eventTypeDomain)}
+      onSelect={({ key }) => navigate(`/${key}`)}
     />
   );
 };

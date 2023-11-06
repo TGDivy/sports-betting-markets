@@ -1,40 +1,57 @@
+import { Breadcrumb, ConfigProvider, Layout, theme, Typography } from "antd";
 import "antd/dist/reset.css";
-import "config/global.css";
-import React, { useEffect } from "react";
-import { getEvents } from "./api/smarkets-events/smarkets-events";
-import {
-  Breadcrumb,
-  ConfigProvider,
-  Layout,
-  Menu,
-  theme,
-  Typography,
-} from "antd";
-import { Outlet, Route, Routes } from "react-router-dom";
 import { MainHeader } from "components/header/header";
 import { MainSider } from "components/sider/sider";
+import "config/global.css";
+import { Suspense } from "react";
+import { Link, Outlet, Route, Routes, useLocation } from "react-router-dom";
 
 const { Content } = Layout;
 const { Text } = Typography;
 
+const itemRender = (route: any, params: any, routes: any, paths: any) => {
+  const last = routes.indexOf(route) === routes.length - 1;
+  return last ? (
+    <span>{route.title}</span>
+  ) : (
+    <Link to={paths.join("/")}>{route.title}</Link>
+  );
+};
+
 const Outline = () => {
+  const location = useLocation();
+
+  // const breadCrumbItems = location.pathname
+  //   .split("/")
+  //   .filter((item) => item)
+  //   .map((item) => ({ title: item, href: item }));
+  const breadCrumbItems = [
+    { title: "Home", path: "" },
+    ...location.pathname
+      .split("/")
+      .filter((item) => item)
+      .map((item) => ({ title: item, href: item })),
+  ];
+
+  console.log(breadCrumbItems);
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <MainHeader />
       <Layout>
         <MainSider />
         <Layout style={{ padding: "0 24px 24px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
+          <Breadcrumb
+            style={{ margin: "16px 0" }}
+            items={breadCrumbItems}
+            itemRender={itemRender}
+          />
+
           <Content>
             <Outlet />
           </Content>
         </Layout>
       </Layout>
-    </>
+    </Suspense>
   );
 };
 
@@ -57,6 +74,7 @@ const App = () => {
         token: {
           wireframe: true,
           colorPrimary: "#04B073",
+          borderRadius: 1,
         },
         algorithm: theme.darkAlgorithm,
         components: {
@@ -71,7 +89,7 @@ const App = () => {
         <Routes>
           <Route path="" element={<Outline />}>
             <Route
-              path=""
+              path="*"
               element={
                 <>
                   {" "}
