@@ -40,3 +40,20 @@ If you encounter any issues or have questions, feel free to reach out for assist
 Enjoy using the application!
 
 This README provides a simple and concise guide to get your project running using Docker Compose, and it includes important information for users to understand how to access and use the application.
+
+## If I Had More Time...
+
+If I had more time, I would have implemented the following features:
+
+- Code splitting and lazy loading for the React app.
+- Imrpoved and Specifc Error handling for differnt api calls.
+- Authentication, and route guarding.
+- Unit tests for the React app.
+- More detailed documentation for the project.
+
+## Screenshots
+
+![Home Page 1](screenshots/homepage1.png)
+![Home Page 2](screenshots/homepage2.png)
+![Markets 1](screenshots/markets1.png)
+![Markets 2](screenshots/markets2.png)
