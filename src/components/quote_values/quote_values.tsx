@@ -7,9 +7,10 @@ type Props = { contracts: extendedContractType[] };
 
 export const QuoteValues = (props: Props) => {
   const { contracts } = props;
+  const topContracts = contracts.slice(0, 3);
   return (
     <Space>
-      {contracts.map((contract) => {
+      {topContracts.map((contract) => {
         const { name, id, bids, offers } = contract;
         const bidPrice = bids[0]?.price;
         const offerPrice = offers[0]?.price;

@@ -117,6 +117,26 @@ export const MarketsList = (props: Props) => {
                       }).format(volumeData)}
                   </Text>
                 </Space>
+                {contracts?.length && contracts.length > 3 && (
+                  <Space>
+                    <Text
+                      type="secondary"
+                      style={{
+                        fontSize: 12,
+                      }}
+                    >
+                      Total Contracts:
+                    </Text>
+                    <Text
+                      type="warning"
+                      style={{
+                        fontSize: 12,
+                      }}
+                    >
+                      {contracts?.length}
+                    </Text>
+                  </Space>
+                )}
               </Flex>
               {contracts && <QuoteValues contracts={contracts} />}
             </Flex>
