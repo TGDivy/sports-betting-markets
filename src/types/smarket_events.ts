@@ -1,3 +1,5 @@
+import { extendedMarketType } from "./smarket_markets";
+
 export type eventState =
   | "new"
   | "upcoming"
@@ -6,8 +8,6 @@ export type eventState =
   | "settled"
   | "cancelled"
   | "suspended";
-
-//   [ accumulator, american_football, australian_rules, baseball, basketball, basketball_esports, boxing, call_of_duty, chess, cricket, csgo, current_affairs, cycling, darts, dota_2, esports, football, football_esports, golf, greyhound_racing, handball, horse_racing, ice_hockey, league_of_legends, mma, motorsports, olympics, poker, politics, rowing, rugby_league, rugby_union, sailing, snooker, tv_and_entertainment, table_tennis, tennis, volleyball, winter_sports ]
 
 export type eventTypeDomain =
   | "accumulator"
@@ -97,7 +97,7 @@ export interface eventType {
   };
 }
 
-export type competitorType =
+export type competitorTypes =
   | "a"
   | "b"
   | "home"
@@ -105,7 +105,7 @@ export type competitorType =
   | "Runner"
   | "NonRunner";
 
-export interface competitorT {
+export interface competitorType {
   event_id: number;
   id: number;
   info?: {
@@ -117,87 +117,11 @@ export interface competitorT {
   short_name: string;
   short_code: string;
   slug: string;
-  type: competitorType;
-}
-
-export type marketCategoryType =
-  | "goals"
-  | "half_time"
-  | "handicap"
-  | "totals"
-  | "corners"
-  | "cards"
-  | "players"
-  | "winner"
-  | "other"
-  | "teams"
-  | "place"
-  | "relegation"
-  | "nationality"
-  | "make_the_cut"
-  | "first_round_leader"
-  | "one_eighty"
-  | "set"
-  | "game"
-  | "half"
-  | "quarter"
-  | "frame"
-  | "hole_in_one"
-  | "hole_group_betting"
-  | "hole_match_bet"
-  | "bet_builder";
-
-export interface marketType {
-  bet_delay: number;
-  cashout_unavailable: boolean;
-  categories?: string[];
-  category?: marketCategoryType;
-  complete: boolean;
-  created: string;
-  display_order?: number;
-  description?: string;
-  display_type?: string;
-  event_id: number;
-  hidden: boolean;
-  id: number;
-  info?: {
-    description?: string;
-  };
-  inplay_enabled: boolean;
-  market_type?: {
-    description?: string;
-    name: string;
-    param: string;
-    params: {
-      [key: string]: string;
-    };
-  };
-  modified: string;
-  name: string;
-  slug: string;
-  state:
-    | "new"
-    | "open"
-    | "live"
-    | "halted"
-    | "settled"
-    | "voided"
-    | "unavailable";
-  winner_count: number;
+  type: competitorTypes;
 }
 
 export interface extendedEventType extends eventType {
-  competitors: competitorT[];
+  competitors: competitorType[];
   markets: extendedMarketType[];
   states: any;
-}
-
-export interface volumentType {
-  double_stake_volume: number;
-  market_id: number;
-  volume: number;
-}
-
-export interface extendedMarketType extends marketType {
-  volume?: volumentType;
 }

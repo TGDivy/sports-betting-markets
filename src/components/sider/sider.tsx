@@ -1,5 +1,5 @@
 import { Layout, Menu, MenuProps } from "antd";
-import { getEvents } from "api/smarkets-events/smarkets-events";
+import { getEvents } from "api/smarkets_events/smarkets_events";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSessionStorageAPI } from "utils/hook";
@@ -42,6 +42,7 @@ const CategoriesMenu = () => {
       });
     },
     expiry: 60 * 60 * 24,
+    errorMessageDefault: "Error loading categories",
   });
   const activeKey = location.pathname.split("/")[1];
 

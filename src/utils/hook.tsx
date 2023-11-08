@@ -1,9 +1,11 @@
+import { message } from "antd";
 import { useEffect, useState } from "react";
 
 interface useSessionStorageAPIProps<T> {
   key: string;
   fetchFn: () => Promise<T>;
   expiry?: number;
+  errorMessageDefault?: string;
 }
 
 export const useSessionStorageAPI = <T,>(
@@ -19,13 +21,17 @@ export const useSessionStorageAPI = <T,>(
       if (storedData) {
         setData(JSON.parse(storedData));
       } else {
-        const response = await fetchFn();
+        try {
+          const response = await fetchFn();
 
-        // Store the data in sessionStorage
-        if (!response) return;
-        sessionStorage.setItem(key, JSON.stringify(response));
-        sessionStorage.setItem(`${key}_expiry`, Date.now().toString());
-        setData(response);
+          // Store the data in sessionStorage
+          if (!response) return;
+          sessionStorage.setItem(key, JSON.stringify(response));
+          sessionStorage.setItem(`${key}_expiry`, Date.now().toString());
+          setData(response);
+        } catch (e) {
+          message.error(props.errorMessageDefault || "Error loading data");
+        }
       }
     };
 
@@ -41,7 +47,7 @@ export const useSessionStorageAPI = <T,>(
     }
 
     fetchData();
-  }, [key, fetchFn, expiry, data]);
+  }, [key, fetchFn, expiry, data, props.errorMessageDefault]);
 
   return data;
 };

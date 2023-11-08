@@ -1,14 +1,14 @@
 import { USE_NEW_TYPES } from "config/constants";
 import {
-  competitorT,
+  competitorType,
   eventState,
   eventType,
   eventTypeDomain,
   eventTypeScope,
   jurisdictionType,
-  marketType,
-} from "../../types/smarket-events";
+} from "../../types/smarket_events";
 import { smarketsEventsAPI } from "./init";
+import { marketType } from "types/smarket_markets";
 
 interface getEventsRequest {
   id?: string[]; // A list of event IDs to filter by
@@ -49,6 +49,7 @@ export const getEvents = async (params: getEventsRequest) => {
     }>("", { params });
     return response.data;
   } catch (error) {
+    // When we have decided on the error handling, we will add it here
     throw error;
   }
 };
@@ -68,7 +69,7 @@ export const getEventCompetitors = async (event_ids: number[]) => {
   try {
     const response = await smarketsEventsAPI.get<{
       description: string;
-      competitors: competitorT[];
+      competitors: competitorType[];
     }>(`${event_ids.join(",")}/competitors/`);
     return response.data;
   } catch (error) {
@@ -91,12 +92,4 @@ export const getEventMarkets = async (event_ids: number[]) => {
   } catch (error) {
     throw error;
   }
-};
-
-export const getPaginationLastId = (pagination: string) => {
-  const pagination_last_id = pagination.split("&").find((item) => {
-    return item.includes("pagination_last_id");
-  });
-
-  return pagination_last_id ? Number(pagination_last_id.split("=")[1]) : null;
 };
